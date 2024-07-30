@@ -4,7 +4,7 @@ const app = express();
 const cors = require("cors")
 const dbconnet = require("./utiles/DB");
 const userRouter = require("./Router/userRouter");
-
+const AuthRouter = require("./Router/AuthRouter")
 
 
 app.use(express.json());
@@ -22,6 +22,7 @@ dbconnet()
 
 
 app.use("/api/user" , userRouter)
+app.use("/api/auth" , AuthRouter)
 
 
 

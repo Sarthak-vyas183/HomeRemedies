@@ -6,6 +6,10 @@ import Contact from '../pages/Contact';
 import SignUp from '../pages/SignUp';
 import Login from '../pages/login';
 import Remedies from '../pages/Remedies';
+import RemedyForm from '../pages/RemedyForm';
+import Logout from '../pages/logout';
+import Profile from '../pages/Profile';
+import User from "../pages/User"
 
 function Router() {
   return (
@@ -17,6 +21,15 @@ function Router() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/remedies" element={<Remedies />} />
+        <Route path="/create" element={<RemedyForm/>} />
+        <Route path="/logout" element={<Logout/>} />
+        
+        <Route path='/user' element={<User/>}>
+             <Route path='create' element={<RemedyForm/>} />
+             <Route path='profile' element={<Profile/>} />
+
+        </Route>
+        
       </Routes>
     </div>
   );
