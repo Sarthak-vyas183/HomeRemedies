@@ -57,7 +57,7 @@ const Login = () => {
       alert("Login success");
       navigate("/")
     } catch (error) {
-      setError("Login failed. Please check your credentials.");
+      setErrmsg("Login failed. Please check your credentials.");
     }
   };
 

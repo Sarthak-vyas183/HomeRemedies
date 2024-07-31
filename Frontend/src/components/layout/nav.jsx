@@ -7,7 +7,7 @@ function Nav() {
 
   return (
     <div>
-      <div className='w-[100vw] h-[10vh] bg-blue-900'>
+      <div className='w-[100vw] h-[10vh] bg-blue-900 fixed z-10'>
         <div className='h-full flex justify-evenly items-center text-white'>
           <h1>Home Remedies</h1>
           <ul className='flex gap-10'>

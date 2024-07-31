@@ -59,14 +59,28 @@ const CreateRemedies  = async(req , res) => {
     if(!Remedy) {
         return res.status(401).json({meg : "Failed To Create Remedy"})
     } 
-    
-    res.send("remedy created Success");
+   const user = await userModel.findById(req.userId);
+    if(!user) {
+        return res.status(404).json({msg : "user not found"})
+    }
+     user.remedyList.push(Remedy._id)
+     await user.save()
+     res.send("remedy created Success");
 
     } catch (error) {
         res.status(`somthing went wrong : ${error} `)
     }
 } 
 
+const showMyRemedy = async (req, res) => {
+    try {
+      console.log(req.userId);
+      const data = await RemedyModel.find({ userId: req.userId });
+      res.status(200).json({msg : "YOUR Remedies", data});
+    } catch (error) {
+      res.status(500).json({ error: `Internal server error: ${error.message}` });
+    }
+  };
+  
 
-
-module.exports = {userlogin , usersignup , CreateRemedies }
+module.exports = {userlogin , usersignup , CreateRemedies ,showMyRemedy }

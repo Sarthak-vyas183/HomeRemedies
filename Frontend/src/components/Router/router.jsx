@@ -16,7 +16,11 @@ import Bookmarks from '../pages/Bookmarks';
 import Admin from "../Admin/Admin"
 import Usermanagement from "../Admin/Admin_userManagement"
 import RemedyManagement from "../Admin/Admin_remedyManagement"
-import Admin_profile from '../Admin/Admin_profile';
+
+import IsDoctor from "../IsDoctor/IsDoctor";
+
+import Users_Requests from "../IsDoctor/Users_Requests";
+import Verify_Remedy from '../IsDoctor/Verify_remedy';
 
 function Router() {
   return (
@@ -42,11 +46,20 @@ function Router() {
 
         <Route path='/admin' element={<Admin/>}>
              <Route path='create' element={<RemedyForm/>} />
-             <Route path='profile' element={<Admin_profile/>} />
+             <Route path='profile' element={<Profile/>} />
              <Route path='myremedy' element={<MyRemedy/>} />
              <Route path='bookmarks' element={<Bookmarks/>} />
              <Route path='usermanagement' element={<Usermanagement/>} />
              <Route path='remedymanagement' element={<RemedyManagement/>} />
+
+        </Route> 
+
+        <Route path='/doctor' element={<IsDoctor/>}>
+             <Route path='create' element={<RemedyForm/>} />
+             <Route path='profile' element={<Profile/>} />
+             <Route path='myremedy' element={<MyRemedy/>} />
+             <Route path='requests' element={<Users_Requests/>} />
+             <Route path='verifyremedy' element={<Verify_Remedy/>} />
 
         </Route> 
 

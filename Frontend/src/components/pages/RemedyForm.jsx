@@ -74,10 +74,11 @@ const RemedyForm = () => {
         }
     };
 
-    return (
-        <div className="max-w-md mx-auto my-8 p-4 border rounded-lg shadow-md">
+    return ( 
+        <div className='w-[80vw] h-[90vh] bg-gray-200 text-black flex justify-center py-4 '>
+            <div className="w-[50vw] h-[100%]  overflow-y-scroll overflow-x-hidden mb-4 ">
             <h2 className="text-2xl font-bold mb-4">Submit a Remedy</h2>
-            <form onSubmit={handleSubmit} className="space-y-4" enctype="multipart/form-data" >
+            <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data" >
                
                 <div>
                     <label className="block text-sm font-medium text-gray-700">Title</label>
@@ -160,6 +161,8 @@ const RemedyForm = () => {
                 </div>
             </form>
         </div>
+        </div>
+        
     );
 };
 

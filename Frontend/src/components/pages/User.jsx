@@ -12,8 +12,8 @@ function User() {
     return <Navigate to="/"/>
   }
   return (
-    <div className='flex'>
-    <div className='w-48 min-h-[90vh] bg-transparent p-4 flex flex-col border-r-2 mr-4'>
+    <div className='flex fixed top-[10vh] bg-slate-900 text-white'>
+    <div className='w-[20vw] h-[90vh] bg-transparent p-4 flex flex-col border-r-2'>
       <div className='flex items-center gap-2'>
         <FaHome className='text-2xl' />
         <NavLink className="font-bold text-2xl" to="/user/profile">profile</NavLink> 
@@ -41,7 +41,7 @@ function User() {
       <br />
     </div>
     <Outlet />
-  </div>
+    </div>
   )
 }
 
