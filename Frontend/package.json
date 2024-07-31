@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@j.u.p.iter/auth-provider": "^1.10.1",
+    "framer-motion": "^11.3.19",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.2.1",

@@ -1,7 +1,7 @@
 const RemedyModel = require("../models/RemedyModel")
 
 const GetAllRemedies = async (req , res) => {
-    const remedies = await RemedyModel.find();
+    const remedies = await RemedyModel.find({isVerified : true});
     res.status(200).json({msg : "remedy found", data : remedies});
 }
 
