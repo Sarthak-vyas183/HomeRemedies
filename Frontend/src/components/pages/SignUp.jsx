@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { useAuth } from '../Store/useAuth';
 import { useNavigate } from 'react-router-dom';
 function SignUp() { 
-
    const [Errmsg, setErrmsg] = useState("")
    const [user , setUser] = useState({
     fullname : "",
@@ -25,29 +24,29 @@ function SignUp() {
   const handlesubmit = async (e) => {
      e.preventDefault();
      try {
-        const respones = await fetch("http://localhost:3000/api/user/signup" , {
+        const response = await fetch("http://localhost:3000/api/user/signup" , {
           method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(user),
         })
-        console.log(respones)
-        if(!respones.ok) {
-          const data = await respones.json()
-          if(respones.status == 405) {
+       
+        if(!response.ok) {
+          const data = await response.json()
+          if(response.status == 405) {
             setErrmsg(data.msg)
           } else {
             setErrmsg(data.msg.issues[0].message)
           }
           alert(Errmsg , "")
-          throw new Error(`Network response was not ok: ${respones.status}`);
+          throw new Error(`Network response was not ok: ${response.status}`);
 
          
         }
 
 
-        const data = await respones.json();
+        const data = await response.json();
         storeTokenInLs(data.token)
         setUser({
           fullname: "",

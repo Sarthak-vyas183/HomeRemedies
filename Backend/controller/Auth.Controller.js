@@ -5,4 +5,9 @@ const GetAllRemedies = async (req , res) => {
     res.status(200).json({msg : "remedy found", data : remedies});
 }
 
-module.exports =  {GetAllRemedies};
+const userverification = async(req , res) => {
+    const userdata = req.user;
+    res.status(200).json({msg : "token verified" , userdata })
+}
+
+module.exports =  {GetAllRemedies , userverification};

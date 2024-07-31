@@ -10,6 +10,13 @@ import RemedyForm from '../pages/RemedyForm';
 import Logout from '../pages/logout';
 import Profile from '../pages/Profile';
 import User from "../pages/User"
+import MyRemedy from '../pages/MyRemedy';
+import SpecialistContact from '../pages/SpecialistContact';
+import Bookmarks from '../pages/Bookmarks';
+import Admin from "../Admin/Admin"
+import Usermanagement from "../Admin/Admin_userManagement"
+import RemedyManagement from "../Admin/Admin_remedyManagement"
+import Admin_profile from '../Admin/Admin_profile';
 
 function Router() {
   return (
@@ -27,8 +34,23 @@ function Router() {
         <Route path='/user' element={<User/>}>
              <Route path='create' element={<RemedyForm/>} />
              <Route path='profile' element={<Profile/>} />
+             <Route path='myremedy' element={<MyRemedy/>} />
+             <Route path='contact' element={<SpecialistContact/>} />
+             <Route path='bookmarks' element={<Bookmarks/>} />
+        </Route> 
 
-        </Route>
+
+        <Route path='/admin' element={<Admin/>}>
+             <Route path='create' element={<RemedyForm/>} />
+             <Route path='profile' element={<Admin_profile/>} />
+             <Route path='myremedy' element={<MyRemedy/>} />
+             <Route path='bookmarks' element={<Bookmarks/>} />
+             <Route path='usermanagement' element={<Usermanagement/>} />
+             <Route path='remedymanagement' element={<RemedyManagement/>} />
+
+        </Route> 
+
+
         
       </Routes>
     </div>

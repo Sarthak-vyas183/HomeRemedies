@@ -51,6 +51,9 @@ const userSchema = new mongoose.Schema({
   },
   remedyList: {
     type: [String],
+  },
+  bookMarks: {
+    type: [String],
   }
 });
 
