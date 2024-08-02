@@ -16,11 +16,11 @@ import Bookmarks from '../pages/Bookmarks';
 import Admin from "../Admin/Admin"
 import Usermanagement from "../Admin/Admin_userManagement"
 import RemedyManagement from "../Admin/Admin_remedyManagement"
-
 import IsDoctor from "../IsDoctor/IsDoctor";
-
 import Users_Requests from "../IsDoctor/Users_Requests";
 import Verify_Remedy from '../IsDoctor/Verify_remedy';
+import RemedyDetail from '../pages/RemedyDetail';
+
 
 function Router() {
   return (
@@ -34,7 +34,9 @@ function Router() {
         <Route path="/remedies" element={<Remedies />} />
         <Route path="/create" element={<RemedyForm/>} />
         <Route path="/logout" element={<Logout/>} />
-        
+        <Route path='/remedydetail' element={<RemedyDetail/>} /> 
+ 
+
         <Route path='/user' element={<User/>}>
              <Route path='create' element={<RemedyForm/>} />
              <Route path='profile' element={<Profile/>} />
@@ -62,9 +64,8 @@ function Router() {
              <Route path='verifyremedy' element={<Verify_Remedy/>} />
 
         </Route> 
-
-
-        
+       
+  
       </Routes>
     </div>
   );
