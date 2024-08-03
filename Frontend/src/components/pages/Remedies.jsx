@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-
-import { useAuth } from "../Store/useAuth";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 const Remedies = () => {
-  const [remedies , setRemedies] = useState([])
-  const {setCurr_remedy} = useAuth()
+  const [remedies, setRemedies] = useState([]);
+
   const navigate = useNavigate();
   useEffect(() => {
     const fetchRemedies = async () => {
@@ -32,11 +31,6 @@ const Remedies = () => {
     return `data:image/jpeg;base64,${base64String}`;
   };
 
-  const currentRemedyId = (remedy) => {
-    setCurr_remedy(remedy)
-       navigate("/remedydetail")
-  }
-
   return (
     <div className="relative top-[10vh] min-h-screen bg-gray-100 p-8">
       <h1 className="text-4xl font-bold text-center mb-6">Remedies</h1>
@@ -54,14 +48,14 @@ const Remedies = () => {
                 {remedy.isVerified ? (
                   <img
                     src="../../../images/verified-icon.png"
-                    className="w-8 h-8 bg-green-500 rounded-full "
-                    alt=""
+                    className="w-8 h-8 bg-green-500 rounded-full"
+                    alt="Verified"
                   />
                 ) : (
                   <img
                     src="../../../images/danger.png"
-                    className="w-8 h-8 bg-red-500 rounded-full "
-                    alt=""
+                    className="w-8 h-8 bg-red-500 rounded-full"
+                    alt="Not Verified"
                   />
                 )}
               </div>
@@ -69,12 +63,11 @@ const Remedies = () => {
                 <h2 className="text-xl font-semibold mb-2">{remedy.title}</h2>
                 <p className="text-gray-700 mb-2">{remedy.description}</p>
               </div>
-              <button
-                className="mt-2 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
-                onClick={() => currentRemedyId(remedy)}
-              >
-                Read More
-              </button>
+              <div className="w-full h-16 flex justify-end items-center pr-8">
+                <Link to={`/remedy/${remedy._id}`} className="p-2 m-2 bg-blue-600 rounded-md text-white">
+                  Read more
+                </Link>
+              </div>
             </div>
           ))
         ) : (

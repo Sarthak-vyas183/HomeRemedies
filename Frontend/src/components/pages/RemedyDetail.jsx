@@ -1,13 +1,27 @@
-import React from 'react';
-import { useAuth } from '../Store/useAuth';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-function RemedyDetail() {
-    const { Curr_remedy } = useAuth();
-    
-    // If Curr_remedy is not yet loaded, show a loading message or some placeholder content
-    if (!Curr_remedy) return <div className='text-black'>Loading...</div>;
+function RemedyDetail() { 
+    const [currRemedy, setCurrRemedy] = useState(null); // Set initial state to null
+    const { id } = useParams();
 
-    const { userId, title, description, ingredients, steps, ailments, effectiveness, isVerified, likes, image, upload_date } = Curr_remedy;
+    const curr_remedy = async () => {
+        try {
+            const response = await fetch(`http://localhost:3000/api/auth/remedydetail/${id}`);
+            if (!response.ok) {
+                throw new Error('Remedy Detail Not Found');
+            }
+            const data = await response.json();
+            setCurrRemedy(data.remedydetail);
+        } catch (error) {
+            console.error('Error fetching remedy details:', error);
+            alert('Error fetching remedy details');
+        }
+    };
+
+    useEffect(() => {
+        curr_remedy();
+    }, [id]); 
 
     const getImageSrc = (buffer) => {
         if (!buffer) return "";
@@ -19,24 +33,13 @@ function RemedyDetail() {
         return `data:image/jpeg;base64,${base64String}`;
     };
 
+    if (!currRemedy) {
+        return  <div className='w-[100vw] h-[90vh] relative top-[10vh] bg-red-500'><p>Loading...</p>;</div>  // Render loading state if `currRemedy` is null
+    }
+
     return (
-        <div className='w-[100vw] h-[90vh] bg-gray-100 p-8 relative top-[10vh]'>
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-                <h1 className='text-4xl font-bold mb-4'>{title}</h1>
-                <img src={getImageSrc(image)} alt={title} className="w-full h-64 object-cover mb-4 rounded" />
-                <p className="mb-4"><strong>Description:</strong> {description || "No description available"}</p>
-                <p className="mb-4"><strong>Ingredients:</strong> {ingredients && ingredients.length > 0 ? ingredients.join(', ') : "No ingredients listed"}</p>
-                <p className="mb-4"><strong>Steps:</strong> {steps && steps.length > 0 ? steps.join(', ') : "No steps provided"}</p>
-                <p className="mb-4"><strong>Ailments:</strong> {ailments && ailments.length > 0 ? ailments.join(', ') : "No ailments specified"}</p>
-                <p className="mb-4"><strong>Effectiveness:</strong> {effectiveness || "Effectiveness not rated"}</p>
-                <p className="mb-4"><strong>Verified:</strong> {isVerified ? "Yes" : "No"}</p>
-                <p className="mb-4"><strong>Likes:</strong> {likes.length}</p>
-                <p className="mb-4"><strong>Upload Date:</strong> {new Date(upload_date).toLocaleString()}</p>
-                <div className="flex space-x-4">
-                    <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700">Like</button>
-                    <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700">Dislike</button>
-                </div>
-            </div>
+        <div className='w-[100vw] h-[90vh] relative top-[10vh] bg-red-500'>
+            <div>{currRemedy.title}</div>
         </div>
     );
 }

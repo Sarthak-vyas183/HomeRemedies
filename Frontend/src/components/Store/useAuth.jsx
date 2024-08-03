@@ -5,7 +5,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [user, setUser] = useState();
-  const [Curr_remedy, setCurr_remedy] = useState("");
+  
 
   const storeTokenInLs = (serverToken) => {
     setToken(serverToken);
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isLoggedin, storeTokenInLs, token, LogoutUser ,setCurr_remedy , Curr_remedy }}
+      value={{ user, isLoggedin, storeTokenInLs, token, LogoutUser }}
     >
       {children}
     </AuthContext.Provider>

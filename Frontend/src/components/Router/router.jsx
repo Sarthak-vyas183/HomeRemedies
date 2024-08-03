@@ -34,7 +34,7 @@ function Router() {
         <Route path="/remedies" element={<Remedies />} />
         <Route path="/create" element={<RemedyForm/>} />
         <Route path="/logout" element={<Logout/>} />
-        <Route path='/remedydetail' element={<RemedyDetail/>} /> 
+        <Route path='/remedy/:id' element={<RemedyDetail/>} /> 
  
 
         <Route path='/user' element={<User/>}>
