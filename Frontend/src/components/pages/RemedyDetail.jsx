@@ -85,7 +85,9 @@ function RemedyDetail() {
               </button>
             </div>
           </div>
-        </div>
+         </div>
+
+
         <div className="w-[50%] h-full ml-[20%] mr-[30%] p-8 pb-28 fixed top-[10vh] overflow-y-scroll custom-scrollbar">
           <div className="p-4 img w-[100%] h-auto flex items-center justify-center">
             <img
@@ -120,8 +122,17 @@ function RemedyDetail() {
               {currRemedy.steps}
             </span>{" "}
             <br />
-          </div>
-        </div>
+          </div> <br />
+
+          <div className="w-full h-16  flex justify-evenly items-center">
+             <input className="w-[75%] h-8 border-4 outline-none border-gray-300 px-2" type="text" placeholder="comment Here..." />
+             <button className="py-1 px-6 bg-blue-600 rounded-md text-white">Post</button>
+          </div> 
+
+        </div> 
+
+
+
         <div className="fixed w-[30%] h-full right-0 top-[10vh] overflow-y-scroll pr-2 custom-scrollbar">
           <h1>comments :</h1> <br />
           <section className="flex flex-col gap-8">

@@ -15,15 +15,15 @@ const RemedySchema = new mongoose.Schema({
         required: true
     },
     ingredients: {
-        type: [String],
+        type: String,
         required: true
     },
     steps: {
-        type: [String],
+        type: String,
         required: true
     },
     ailments: {
-        type: [String],
+        type: String,
         required: true
     },
     effectiveness: {
