@@ -1,14 +1,33 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../Store/useAuth';
-
+import gsap from 'gsap';
+import { useEffect } from 'react';
 function Nav() {
+
+  useEffect(() => {
+    const context = gsap.context(() => {
+      gsap.from('.Navigation li , .Navigation h1', {
+        y: -100,
+        opacity: 0,
+        duration: 0.8,
+        stagger : 0.1,
+        ease: "power1.out",
+      });
+    });
+
+   
+    return () => context.revert();
+  }, []);
+
+
+
   const { isLoggedin , user } = useAuth();
 
   return (
     <div>
       <div className='w-[100vw] h-[10vh] bg-transparent  fixed z-10 '>
-        <div className='h-full flex justify-evenly items-center text-white  font-semibold text-2xl font-semibold '>
+        <div className='Navigation h-full flex justify-evenly items-center text-white  font-semibold text-2xl font-semibold '>
           <h1 className='text-gray-100'>HomeRemedy.in</h1>
           <ul className='flex gap-10'>
             <li className=' hover:text-yellow-300'><Link to="/">Home</Link></li>
