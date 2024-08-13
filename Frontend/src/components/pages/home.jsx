@@ -16,6 +16,20 @@ function Home() {
     return () => context.revert();
   }, []);
 
+  useEffect(() => {
+    const context = gsap.context(() => {
+      gsap.to("#nav-header", {
+        opacity: 0,
+        delay : 1,
+        duration: 1,
+       
+      });
+    });
+  
+  }, []);
+  
+  
+  
   return (
     <section>
       <div
@@ -57,8 +71,8 @@ function Home() {
         </section>
       </div>
 
-      <div className="part2 w-[100vw] h-[100vh] bg-green-500">
-        <div className="w-full bg-transparent h-[10%]"></div>
+      <div id="part2" className="w-[100vw] h-[100vh] bg-green-500">
+        <div id="nav-header" className="w-full bg-transparent h-[10%]"></div>
 
         <div className="w-full h-[15%] bg-white flex flex-col justify-center items-center">
           <h1 className="text-3xl font-semibold text-[#395F13]">Hurbel Pure</h1>
@@ -70,35 +84,76 @@ function Home() {
           />
         </div>
 
-        <div className="w-full h-[75%] flex bg-white">
-
-          <div className="h-full w-1/2 px-2">
-
+        <div  className="w-full h-[75%] flex bg-white">
+          <div id="part2Left" className="h-full w-1/2 px-2">
             <section className="flex items-center justify-center gap-2">
               <p className="w-1 h-14 bg-green-700"></p>
               <span>
                 <p>We are Amazing</p>
-                <p className="text-2xl font-semibold">Remedies for all problems</p>
+                <p className="text-2xl font-semibold">
+                  Remedies for all problems
+                </p>
               </span>
-            </section> 
-
-            <section className="pt-10 pl-36">
-                <p className="w-full">Homemade rural remedies preserve traditional knowledge passed down through generations, offering natural, accessible solutions for common ailments. They promote self-reliance and health in rural communities, reducing dependency on modern pharmaceuticals. Additionally, these remedies often use locally available ingredients, making them both cost-effective and sustainable.</p>
-                 <span className="flex flex-wrap w-5/6 gap-4 pt-4">
-                  <p className="flex"><img className="w-6 h-auto" src="../../../images/homeDot.png" alt="" /><p>Natural Healing</p> </p>
-                  <p className="flex"><img className="w-6 h-auto" src="../../../images/homeDot.png" alt="" /><p>No side Effect</p> </p>
-                  <p className="flex"><img className="w-6 h-auto" src="../../../images/homeDot.png" alt="" /><p>100% Organic</p> </p>
-                  <p className="flex"><img className="w-6 h-auto" src="../../../images/homeDot.png" alt="" /><p>Doctor Verified</p> </p>
-                 </span> 
-               
-                <button className="bg-[#395F13] p-2 text-white rounded-md mt-4">Read More</button>
             </section>
 
-          </div> 
+            <section className="pt-10 pl-36">
+              <p className="w-full">
+                Homemade rural remedies preserve traditional knowledge passed
+                down through generations, offering natural, accessible solutions
+                for common ailments. They promote self-reliance and health in
+                rural communities, reducing dependency on modern
+                pharmaceuticals. Additionally, these remedies often use locally
+                available ingredients, making them both cost-effective and
+                sustainable.
+              </p>
+              <span className="flex flex-wrap w-5/6 gap-4 pt-4">
+                <p className="flex">
+                  <img
+                    className="w-6 h-auto"
+                    src="../../../images/homeDot.png"
+                    alt=""
+                  />
+                  <p>Natural Healing</p>{" "}
+                </p>
+                <p className="flex">
+                  <img
+                    className="w-6 h-auto"
+                    src="../../../images/homeDot.png"
+                    alt=""
+                  />
+                  <p>No side Effect</p>{" "}
+                </p>
+                <p className="flex">
+                  <img
+                    className="w-6 h-auto"
+                    src="../../../images/homeDot.png"
+                    alt=""
+                  />
+                  <p>100% Organic</p>{" "}
+                </p>
+                <p className="flex">
+                  <img
+                    className="w-6 h-auto"
+                    src="../../../images/homeDot.png"
+                    alt=""
+                  />
+                  <p>Doctor Verified</p>{" "}
+                </p>
+              </span>
 
-          <div className="h-full w-1/2 flex justify-center items-center">
-            <img className="w-[75%] h-auto" src="../../../images/home02.png" alt="loading......."/>
-           </div>
+              <button className="bg-[#395F13] p-2 text-white rounded-md mt-4">
+                Read More
+              </button>
+            </section>
+          </div>
+
+          <div id="part2Right" className="h-full w-1/2 flex justify-center items-center">
+            <img
+              className="w-[75%] h-auto"
+              src="../../../images/home02.png"
+              alt="loading......."
+            />
+          </div>
         </div>
       </div>
     </section>
