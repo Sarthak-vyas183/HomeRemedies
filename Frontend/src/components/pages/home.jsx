@@ -35,12 +35,13 @@ function Home() {
       <div
         className="w-[100vw] h-[100vh]"
         style={{
-          backgroundImage: "url(../../../images/home.png)",
+          backgroundImage: "url(../../../images/about.png)",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           rotate: "360deg",
         }}
       >
+        <div className="w-full h-full bg-black bg-opacity-60">
         <section className="left w-[50%] h-full flex flex-col justify-center items-center">
           <div className="w-full px-16">
             <p className="text-green-400 bg-gray-700 bg-opacity-80 rounded-md p-2 text-5xl">
@@ -68,7 +69,9 @@ function Home() {
               </p>
             </div>
           </div>
-        </section>
+        </section> 
+        </div>
+
       </div>
 
       <div id="part2" className="w-[100vw] h-[100vh] bg-green-500">
