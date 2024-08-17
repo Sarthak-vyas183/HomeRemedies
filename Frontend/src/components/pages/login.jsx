@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from '../Store/useAuth';
 
 const Login = () => {
-  const [Errmsg, setErrmsg] = useState("")
+  const [Errmsg, setErrmsg] = useState("");
+
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -76,7 +77,7 @@ const Login = () => {
             <input
               type="email"
               name="email"
-              value={user.email}
+              
               onChange={handleInput}
               className="mt-1 p-2 w-full border rounded-md"
               required

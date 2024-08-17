@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
+import { useAuth } from "../Store/useAuth";
 function RemedyDetail() {
+  const {token} = useAuth();
   const [currRemedy, setCurrRemedy] = useState(null);
   const [owner, setOwner] = useState("");
   const { id } = useParams();
+  const [comment, setComment] = useState(""); // Initialize with empty string
 
   const curr_remedy = async () => {
     try {
@@ -35,6 +37,34 @@ function RemedyDetail() {
     );
     const base64String = window.btoa(binary);
     return `data:image/jpeg;base64,${base64String}`;
+  };
+
+  const handleInput = (e) => {
+    setComment(e.target.value); // Update comment state directly
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/comment", {
+        method: "POST",
+        headers: {
+           'Authorization': `Bearer ${token}`,
+           'remedyId' : id,
+        },
+        body: JSON.stringify({ comment : comment }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to post comment");
+      } 
+
+      const data = await response.json(); // Await the response
+      console.log(data);
+      setComment(""); // Clear the comment input field after submission
+    } catch (error) {
+      console.log(`Internal server error: ${error}`);
+    }
   };
 
   if (!currRemedy) {
@@ -85,8 +115,7 @@ function RemedyDetail() {
               </button>
             </div>
           </div>
-         </div>
-
+        </div>
 
         <div className="w-[50%] h-full ml-[20%] mr-[30%] p-8 pb-28 fixed top-[10vh] overflow-y-scroll custom-scrollbar">
           <div className="p-4 img w-[100%] h-auto flex items-center justify-center">
@@ -98,12 +127,12 @@ function RemedyDetail() {
           </div>
           <div className="title_desc">
             <h1 className="font-medium">
-              <span className="font-semibold text-2xl font-bold">Title : </span>
+              <span className="font-semibold text-2xl ">Title : </span>
               {currRemedy.title}
             </h1>{" "}
             <br />
             <p className="leading-tight">
-              <span className="font-semibold text-2xl font-bold">
+              <span className="font-semibold text-2xl ">
                 Description : <br />
               </span>
               {currRemedy.description}
@@ -112,32 +141,44 @@ function RemedyDetail() {
           </div>
           <div className="stepsAndIngredient">
             <span>
-              <p className="font-semibold text-2xl font-bold">Ingredients : </p>
+              <p className="font-semibold text-2xl">Ingredients : </p>
               {currRemedy.ingredients}
-            </span>{" "}
+            </span>
             <br />
             <br />
             <span>
-              <p className="font-semibold text-2xl font-bold">Steps :</p>
+              <p className="font-semibold text-2xl">Steps :</p>
               {currRemedy.steps}
             </span>{" "}
             <br />
-          </div> <br />
+          </div>{" "}
+          <br />
 
-          <div className="w-full h-16  flex justify-evenly items-center">
-             <input className="w-[75%] h-8 border-4 outline-none border-gray-300 px-2" type="text" placeholder="comment Here..." />
-             <button className="py-1 px-6 bg-blue-600 rounded-md text-white">Post</button>
-          </div> 
-
-        </div> 
-
-
+          <form
+            onSubmit={handleSubmit}
+            className="w-full flex justify-evenly items-center h-16"
+          >
+            <input
+              className="w-[75%] h-8 border-4 outline-none border-gray-300 px-2"
+              type="text"
+              placeholder="Comment here..."
+              onChange={handleInput}
+              value={comment}
+            />
+            <button
+              type="submit"
+              className="py-1 px-6 bg-blue-600 rounded-md text-white"
+            >
+              Post
+            </button>
+          </form>
+        </div>
 
         <div className="fixed w-[30%] h-full right-0 top-[10vh] overflow-y-scroll pr-2 custom-scrollbar">
-          <h1>comments :</h1> <br />
+          <h1>Comments :</h1> <br />
           <section className="flex flex-col gap-8">
             <div className="w-full h-auto border-y border-black">
-              <span className="p-2 border-b border-black w-full h-10 flex justify-start items-center gap-2 p-2">
+              <span className="p-2 border-b border-black w-full h-10 flex justify-start items-center gap-2 ">
                 <img
                   className="w-8 h-8 rounded-full"
                   src="../../../images/user.png"

@@ -1,5 +1,6 @@
 const RemedyModel = require("../models/RemedyModel")
 const UserModel = require("../models/userModel") 
+const ReviewModel = require("../models/ReviewModel");
 
 const GetAllRemedies = async (req , res) => {
     const remedies = await RemedyModel.find({isVerified : true}); 
@@ -28,5 +29,20 @@ const remedydetail = async(req , res) => {
      } catch (error) {
         res.status(500).json({msg : "Internal server error" , err : error})
      }
-}
-module.exports =  {GetAllRemedies , userverification , remedydetail};
+} 
+
+const remedyReview = async (req , res) => {
+   try {
+
+      const rmid =  req.header("remedyId")
+      const Review =  await ReviewModel.create({comment : req.body.comment , userId : req.userId , RemedyId : rmid });
+      console.log(req.body.comment)
+      console.log(Review)
+      if(!Review) return res.send("failed");
+      res.json({msg : "ok"})
+   } catch (error) {
+      res.status(404).send("comment Failed");
+   }
+} 
+
+module.exports =  {GetAllRemedies , userverification , remedydetail , remedyReview};
