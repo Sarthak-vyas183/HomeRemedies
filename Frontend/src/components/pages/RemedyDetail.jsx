@@ -1,12 +1,54 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../Store/useAuth";
+
 function RemedyDetail() {
-  const {token} = useAuth();
+  const { token } = useAuth();
   const [currRemedy, setCurrRemedy] = useState(null);
   const [owner, setOwner] = useState("");
   const { id } = useParams();
-  const [comment, setComment] = useState(""); // Initialize with empty string
+  const [comment, setComment] = useState(""); // Initialize with an empty string
+  const [commentOnRemedy, setCommentOnRemedy] = useState([]); // Initialize with an empty array
+  const [commenter , setCommenter] = useState(); // the userdata who comment on a remedy 
+
+  const showComments = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/showcomments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ RemedyId: id }),
+      });
+      if (!response.ok) throw new Error("Internal server error!");
+
+      const res = await response.json();
+      setCommentOnRemedy(res.data || []); // Set comments, or an empty array if res.data is undefined
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const commentUser = async(userId) => {
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/showcommentuser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user: userId }),
+      }); 
+      if (!response.ok) throw new Error("Internal server error!");
+
+      const res = await response.json();
+      setCommenter(res.commenter); // Set comments, or an empty array if res.data is undefined
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    showComments();
+  }, [id, token]);
 
   const curr_remedy = async () => {
     try {
@@ -49,19 +91,20 @@ function RemedyDetail() {
       const response = await fetch("http://localhost:3000/api/auth/comment", {
         method: "POST",
         headers: {
-           'Authorization': `Bearer ${token}`,
-           'remedyId' : id,
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ comment : comment }),
+        body: JSON.stringify({ comment: comment, RemedyId: id }), // Remedy ID added to the body
       });
 
       if (!response.ok) {
         throw new Error("Failed to post comment");
-      } 
+      }
 
       const data = await response.json(); // Await the response
       console.log(data);
       setComment(""); // Clear the comment input field after submission
+      showComments(); // Refresh the comments after posting a new one
     } catch (error) {
       console.log(`Internal server error: ${error}`);
     }
@@ -77,7 +120,7 @@ function RemedyDetail() {
 
   return (
     <>
-      <style jsx>{`
+      <style>{`
         .custom-scrollbar::-webkit-scrollbar {
           display: none; /* Safari and Chrome */
         }
@@ -86,6 +129,7 @@ function RemedyDetail() {
           scrollbar-width: none; /* Firefox */
         }
       `}</style>
+
       <div className="w-[100vw] h-[90vh] top-[10vh] flex overflow-x-hidden">
         <div className="fixed w-[20%] h-full left-0 top-[10vh] border-r border-black">
           <div className="w-full h-48 px-2">
@@ -176,23 +220,25 @@ function RemedyDetail() {
 
         <div className="fixed w-[30%] h-full right-0 top-[10vh] overflow-y-scroll pr-2 custom-scrollbar">
           <h1>Comments :</h1> <br />
-          <section className="flex flex-col gap-8">
-            <div className="w-full h-auto border-y border-black">
-              <span className="p-2 border-b border-black w-full h-10 flex justify-start items-center gap-2 ">
-                <img
-                  className="w-8 h-8 rounded-full"
-                  src="../../../images/user.png"
-                  alt=""
-                />
-                <p>User Name</p>
-              </span>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Laudantium animi culpa nesciunt quisquam doloribus consequatur
-                mollitia omnis alias tempora nisi, dolor rem eius ipsa ab
-                tempore voluptate libero quibusdam aliquid?
-              </p>
-            </div>
+          <section className="flex flex-col gap-8 mb-[15vh]">
+            {commentOnRemedy && commentOnRemedy.length > 0 ? (
+              commentOnRemedy.map((comment, index) => (
+                <div key={index} className="w-full h-auto border-y border-black">
+                  
+                  <span className="p-2 border-b border-black w-full h-10 flex justify-start items-center gap-2 ">
+                    <img
+                      className="w-8 h-8 rounded-full"
+                      src="../../../images/user.png"
+                      alt=""
+                    />
+                    <p>{comment.userId}</p>
+                  </span>
+                  <p>{comment.comment}</p>
+                </div>
+              ))
+            ) : (
+              <p>No comments yet</p>
+            )}
           </section>
         </div>
       </div>

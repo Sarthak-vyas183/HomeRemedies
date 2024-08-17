@@ -1,6 +1,7 @@
 const RemedyModel = require("../models/RemedyModel")
 const UserModel = require("../models/userModel") 
-const ReviewModel = require("../models/ReviewModel");
+const ReviewModel = require("../models/CommentModel");
+const userModel = require("../models/userModel");
 
 const GetAllRemedies = async (req , res) => {
     const remedies = await RemedyModel.find({isVerified : true}); 
@@ -31,18 +32,62 @@ const remedydetail = async(req , res) => {
      }
 } 
 
-const remedyReview = async (req , res) => {
-   try {
+const remedyReview = async (req, res) => {
+  const { comment, RemedyId } = req.body;
 
-      const rmid =  req.header("remedyId")
-      const Review =  await ReviewModel.create({comment : req.body.comment , userId : req.userId , RemedyId : rmid });
-      console.log(req.body.comment)
-      console.log(Review)
-      if(!Review) return res.send("failed");
-      res.json({msg : "ok"})
-   } catch (error) {
-      res.status(404).send("comment Failed");
-   }
-} 
+  // Check if required fields are present
+  if (!comment || !RemedyId) {
+    return res.status(400).json({ msg: "Required fields are missing" });
+  }
 
-module.exports =  {GetAllRemedies , userverification , remedydetail , remedyReview};
+  try {
+    // Ensure userId is not null or undefined
+    if (!req.userId) {
+      return res.status(400).json({ msg: "User ID is missing" });
+    }
+
+    // Create the review
+    const newReview = await ReviewModel.create({ RemedyId, userId: req.userId, comment });
+
+    if (!newReview) {
+      return res.status(500).json({ msg: "Failed to post review" });
+    }
+
+    res.json({ msg: "Review posted successfully" });
+  } catch (error) {
+    // Log error details and send appropriate error response
+    console.error("Error posting review:", error);
+    res.status(500).json({ msg: "Internal server error", error: error.message });
+  }
+};
+
+const showComments = async (req, res) => {
+  try {
+    const response = await ReviewModel.find({ RemedyId: req.body.RemedyId });
+    
+    if (response.length === 0) {
+      return res.status(404).send("No Remedy found");
+    }
+    
+    res.status(200).json({ msg: "Remedy found", data: response });
+  } catch (error) {
+    res.status(500).json({ msg: "Server error occurred", err: error.message });
+  }
+};
+
+const showCommenter = async (req , res) => {
+     try {
+       const user = await userModel.findOne({_id : req.body.userId})
+       console.log(user)
+       if(!user) return res.status(404).send("not found : user")
+         
+       res.status(200).json({commenter : user})
+     } catch (error) {
+        res.send("commenter not found")
+     }
+}
+
+
+ 
+
+module.exports =  {GetAllRemedies , userverification , remedydetail , remedyReview , showComments , showCommenter};
