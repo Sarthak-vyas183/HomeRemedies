@@ -32,9 +32,10 @@ const Remedies = () => {
   };
 
   return (
-    <div className="relative top-[10vh] min-h-screen bg-gray-100 p-8">
-      <h1 className="text-4xl font-bold text-center mb-6">Remedies</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="min-h-screen bg-gray-100 relative top-[10vh]">
+      
+      <h1 className="text-4xl font-bold text-center mb-6 w-full h-[5%]">Remedies</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
         {remedies.length > 0 ? (
           remedies.map((remedy) => (
             <div
