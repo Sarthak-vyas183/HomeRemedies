@@ -7,9 +7,9 @@ function RemedyDetail() {
   const [currRemedy, setCurrRemedy] = useState(null);
   const [owner, setOwner] = useState("");
   const { id } = useParams();
-  const [comment, setComment] = useState(""); // Initialize with an empty string
-  const [commentOnRemedy, setCommentOnRemedy] = useState([]); // Initialize with an empty array
-  const [commenter , setCommenter] = useState(); // the userdata who comment on a remedy 
+  const [comment, setComment] = useState("");
+  const [commentOnRemedy, setCommentOnRemedy] = useState([]);
+  const [RemedySaved, setRemedySaved] = useState(null);
 
   const showComments = async () => {
     try {
@@ -20,13 +20,12 @@ function RemedyDetail() {
         },
         body: JSON.stringify({ RemedyId: id }),
       });
-  
+
       if (!response.ok) throw new Error("Internal server error!");
-  
+
       const res = await response.json();
-      const comments = res.data || []; // Fetch comments
-  
-      // Fetch user data for each comment
+      const comments = res.data || [];
+
       const commentsWithUserData = await Promise.all(
         comments.map(async (comment) => {
           const userResponse = await fetch("http://localhost:3000/api/auth/showcommentuser", {
@@ -36,24 +35,22 @@ function RemedyDetail() {
             },
             body: JSON.stringify({ user: comment.userId }),
           });
-  
+
           if (!userResponse.ok) throw new Error("Failed to fetch user data");
-  
+
           const userData = await userResponse.json();
           return {
-            ...comment, // include the original comment data
-            commenter: userData.commenter, // include user data from the response
+            ...comment,
+            commenter: userData.commenter,
           };
         })
       );
-  
-      setCommentOnRemedy(commentsWithUserData); // Set the combined data to state
+
+      setCommentOnRemedy(commentsWithUserData);
     } catch (error) {
       console.log(error);
     }
   };
-  
-
 
   useEffect(() => {
     showComments();
@@ -61,9 +58,7 @@ function RemedyDetail() {
 
   const curr_remedy = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/auth/remedydetail/${id}`
-      );
+      const response = await fetch(`http://localhost:3000/api/auth/remedydetail/${id}`);
       if (!response.ok) {
         throw new Error("Remedy Detail Not Found");
       }
@@ -91,7 +86,7 @@ function RemedyDetail() {
   };
 
   const handleInput = (e) => {
-    setComment(e.target.value); // Update comment state directly
+    setComment(e.target.value);
   };
 
   const handleSubmit = async (e) => {
@@ -103,21 +98,78 @@ function RemedyDetail() {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ comment: comment, RemedyId: id }), // Remedy ID added to the body
+        body: JSON.stringify({ comment, RemedyId: id }),
       });
 
       if (!response.ok) {
         throw new Error("Failed to post comment");
       }
 
-      const data = await response.json(); // Await the response
+      const data = await response.json();
       console.log(data);
-      setComment(""); // Clear the comment input field after submission
-      showComments(); // Refresh the comments after posting a new one
+      setComment("");
+      showComments();
     } catch (error) {
       console.log(`Internal server error: ${error}`);
     }
   };
+
+  const bookMarkRemedy = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/bookmark", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ RemedyId: id }),
+      });
+
+      if (!response.ok) {
+        console.log("Server side error");
+        return;
+      } 
+
+      if (response.status === 403) {
+        setRemedySaved(false);
+      } else if (response.status === 200) {
+        setRemedySaved(true);
+      } 
+       
+    } catch (error) {
+      console.log(`Internal server error: ${error}`);
+    }
+  };
+
+  const bookMarkOrNot = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/bookmarkornot", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ RemedyId: id }),
+      });
+
+      if (!response.ok) {
+        console.log("Server side error");
+        return;
+      }
+
+      if (response.status === 403) {
+        setRemedySaved(true);
+      } else if (response.status === 200) {
+        setRemedySaved(false);
+      }
+    } catch (error) {
+      console.log(`Internal server error: ${error}`);
+    }
+  };
+
+  useEffect(() => {
+    bookMarkOrNot();
+  }, [id, token]);
 
   if (!currRemedy) {
     return (
@@ -171,7 +223,10 @@ function RemedyDetail() {
         </div>
 
         <div className="w-[50%] h-full ml-[20%] mr-[30%] p-8 pb-28 fixed top-[10vh] overflow-y-scroll custom-scrollbar">
-          <div className="p-4 img w-[100%] h-auto flex items-center justify-center">
+          <div className="p-4 img w-[100%] h-auto flex flex-col items-center justify-center">
+            <i onClick={bookMarkRemedy} className={`ri-bookmark-${RemedySaved ? "fill" : "line"} ml-96`}>
+              {RemedySaved ? "Saved" : "Save"}
+            </i>
             <img
               className="w-[80%] h-full rounded-md"
               src={getImageSrc(currRemedy.image)}
@@ -180,14 +235,12 @@ function RemedyDetail() {
           </div>
           <div className="title_desc">
             <h1 className="font-medium">
-              <span className="font-semibold text-2xl ">Title : </span>
+              <span className="font-semibold text-2xl">Title : </span>
               {currRemedy.title}
             </h1>{" "}
             <br />
             <p className="leading-tight">
-              <span className="font-semibold text-2xl ">
-                Description : <br />
-              </span>
+              <span className="font-semibold text-2xl">Description : <br /></span>
               {currRemedy.description}
             </p>{" "}
             <br />
@@ -228,28 +281,32 @@ function RemedyDetail() {
         </div>
 
         <div className="fixed w-[30%] h-full right-0 top-[10vh] overflow-y-scroll pr-2 custom-scrollbar">
-  <h1>Comments :</h1> <br />
-  <section className="flex flex-col gap-8 mb-[15vh]">
-    {commentOnRemedy && commentOnRemedy.length > 0 ? (
-      commentOnRemedy.map((comment, index) => (
-        <div key={index} className="w-full h-auto border-y border-black">
-          <span className="p-2 border-b border-black w-full h-10 flex justify-start items-center gap-2 ">
-            <img
-              className="w-8 h-8 rounded-full"
-              src="../../../images/user.png"
-              alt=""
-            />
-            <p className="flex"><p className="text-green-600">{comment.commenter?.isDoctor==true? "Dr." :"" || ""}</p>{comment.commenter?.fullname || "Unknown User"} </p> {/* Display commenter name */}
-          </span>
-          <p>{comment.comment}</p>
+          <h1>Comments :</h1> <br />
+          <section className="flex flex-col gap-8 mb-[15vh]">
+            {commentOnRemedy && commentOnRemedy.length > 0 ? (
+              commentOnRemedy.map((comment, index) => (
+                <div key={index} className="w-full h-auto border-y border-black">
+                  <span className="p-2 border-b border-black w-full h-10 flex justify-start items-center gap-2">
+                    <img
+                      className="w-8 h-8 rounded-full"
+                      src="../../../images/user.png"
+                      alt=""
+                    />
+                    <p className="flex">
+                      <p className="text-green-600">
+                        {comment.commenter?.isDoctor ? "Dr." : ""}
+                      </p>
+                      {comment.commenter?.fullname || "Unknown User"}
+                    </p>
+                  </span>
+                  <p>{comment.comment}</p>
+                </div>
+              ))
+            ) : (
+              <p>No comments yet</p>
+            )}
+          </section>
         </div>
-      ))
-    ) : (
-      <p>No comments yet</p>
-    )}
-  </section>
-</div>
-
       </div>
     </>
   );

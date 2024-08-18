@@ -87,7 +87,40 @@ const showCommenter = async (req , res) => {
      }
 }
 
+const bookmarkRemedy = async (req , res) => {
+          try {
+            const user = await userModel.findOne({_id : req.userId});
+           if(!user) return res.status(404).json({msg : "User not found"})
 
+           const remedyIdx = user.bookMarks.indexOf(req.body.RemedyId);
+            if(remedyIdx != -1) {
+              user.bookMarks.splice(remedyIdx , 1);
+              await user.save()
+             return res.status(403).json({msg :"Remedy deleted"});
+            }
+            user.bookMarks.push(req.body.RemedyId);
+           await user.save()
+           res.status(200).json({msg : "remedy saved success"});
+           } catch (error) {
+              res.json({msg : 'server error' , err : error})
+           }
+}
+
+const bookmarkornot = async (req , res) => {
+  try {
+  const user = await userModel.findOne({_id : req.userId});
+   if(!user) return res.status(404).json({msg : "User not found"})
+
+   const remedyIdx = user.bookMarks.indexOf(req.body.RemedyId);
+    if(remedyIdx != -1) {
+      return res.status(403).json({msg :"remedy Exist !"});
+    }
+
+   res.status(200).json({msg : "Remedy not Exist"});
+   } catch (error) {
+      res.json({msg : 'server error' , err : error})
+   } 
+}
  
 
-module.exports =  {GetAllRemedies , userverification , remedydetail , remedyReview , showComments , showCommenter};
+module.exports =  {GetAllRemedies , userverification , remedydetail , remedyReview , showComments , showCommenter , bookmarkRemedy , bookmarkornot};
