@@ -20,31 +20,40 @@ function RemedyDetail() {
         },
         body: JSON.stringify({ RemedyId: id }),
       });
+  
       if (!response.ok) throw new Error("Internal server error!");
-
+  
       const res = await response.json();
-      setCommentOnRemedy(res.data || []); // Set comments, or an empty array if res.data is undefined
+      const comments = res.data || []; // Fetch comments
+  
+      // Fetch user data for each comment
+      const commentsWithUserData = await Promise.all(
+        comments.map(async (comment) => {
+          const userResponse = await fetch("http://localhost:3000/api/auth/showcommentuser", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ user: comment.userId }),
+          });
+  
+          if (!userResponse.ok) throw new Error("Failed to fetch user data");
+  
+          const userData = await userResponse.json();
+          return {
+            ...comment, // include the original comment data
+            commenter: userData.commenter, // include user data from the response
+          };
+        })
+      );
+  
+      setCommentOnRemedy(commentsWithUserData); // Set the combined data to state
     } catch (error) {
       console.log(error);
     }
   };
-  const commentUser = async(userId) => {
-    try {
-      const response = await fetch("http://localhost:3000/api/auth/showcommentuser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ user: userId }),
-      }); 
-      if (!response.ok) throw new Error("Internal server error!");
+  
 
-      const res = await response.json();
-      setCommenter(res.commenter); // Set comments, or an empty array if res.data is undefined
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     showComments();
@@ -219,28 +228,28 @@ function RemedyDetail() {
         </div>
 
         <div className="fixed w-[30%] h-full right-0 top-[10vh] overflow-y-scroll pr-2 custom-scrollbar">
-          <h1>Comments :</h1> <br />
-          <section className="flex flex-col gap-8 mb-[15vh]">
-            {commentOnRemedy && commentOnRemedy.length > 0 ? (
-              commentOnRemedy.map((comment, index) => (
-                <div key={index} className="w-full h-auto border-y border-black">
-                  
-                  <span className="p-2 border-b border-black w-full h-10 flex justify-start items-center gap-2 ">
-                    <img
-                      className="w-8 h-8 rounded-full"
-                      src="../../../images/user.png"
-                      alt=""
-                    />
-                    <p>{comment.userId}</p>
-                  </span>
-                  <p>{comment.comment}</p>
-                </div>
-              ))
-            ) : (
-              <p>No comments yet</p>
-            )}
-          </section>
+  <h1>Comments :</h1> <br />
+  <section className="flex flex-col gap-8 mb-[15vh]">
+    {commentOnRemedy && commentOnRemedy.length > 0 ? (
+      commentOnRemedy.map((comment, index) => (
+        <div key={index} className="w-full h-auto border-y border-black">
+          <span className="p-2 border-b border-black w-full h-10 flex justify-start items-center gap-2 ">
+            <img
+              className="w-8 h-8 rounded-full"
+              src="../../../images/user.png"
+              alt=""
+            />
+            <p className="flex"><p className="text-green-600">{comment.commenter?.isDoctor==true? "Dr." :"" || ""}</p>{comment.commenter?.fullname || "Unknown User"} </p> {/* Display commenter name */}
+          </span>
+          <p>{comment.comment}</p>
         </div>
+      ))
+    ) : (
+      <p>No comments yet</p>
+    )}
+  </section>
+</div>
+
       </div>
     </>
   );

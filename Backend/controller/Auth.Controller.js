@@ -63,7 +63,7 @@ const remedyReview = async (req, res) => {
 
 const showComments = async (req, res) => {
   try {
-    const response = await ReviewModel.find({ RemedyId: req.body.RemedyId });
+    const response = await ReviewModel.find({ RemedyId: req.body.RemedyId }).select("-password");
     
     if (response.length === 0) {
       return res.status(404).send("No Remedy found");
@@ -77,7 +77,7 @@ const showComments = async (req, res) => {
 
 const showCommenter = async (req , res) => {
      try {
-       const user = await userModel.findOne({_id : req.body.userId})
+       const user = await userModel.findOne({_id : req.body.user})
        console.log(user)
        if(!user) return res.status(404).send("not found : user")
          
