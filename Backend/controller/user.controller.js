@@ -2,6 +2,7 @@ const userModel = require("../models/userModel")
 const bcrypt = require("bcrypt")
 var jwt = require('jsonwebtoken');
 const RemedyModel = require("../models/RemedyModel") 
+const reqModel = require("../models/UserRequest");
 
 const userlogin = async (req , res) => {
     try {
@@ -82,5 +83,60 @@ const showMyRemedy = async (req, res) => {
     }
   };
   
+const mybookmarks = async (req , res) => {
+       const user = await userModel.findOne({_id  : req.userId}); 
+      
+          if(!user) {
+            console.log("user not found!")
+            return;
+          } 
+         
+         res.status(200).json({msg : "saved Remedy found" , data : user.bookMarks})
+}
 
-module.exports = {userlogin , usersignup , CreateRemedies ,showMyRemedy }
+const mybookmarksdetail = async(req , res) => {
+   try {
+      const remedy = await RemedyModel.findOne({_id : req.body.remedyId});
+      if(!remedy) {
+         return res.send("Remedy Not found !")
+      } 
+      res.status(200).json({msg : "Remedy found" , remedydetail :{ title : remedy.title , desc : remedy.description , img : remedy.image , Id : remedy._id} })
+   } catch (error) {
+     res.send(`Internal server error : ${error}`)
+   } 
+   
+}  
+  
+const verifyemail = async(req , res) => {
+      try {
+        const response = await userModel.find({isDoctor : true}).select("email")
+        response.map((res , idx)=> {
+          if(res.email === req.body.email) {
+            return res.status(200).send("verified")
+          } 
+        }) 
+        res.status(401).send("Invalid Email")
+      } catch (error) {
+        res.send(`Internal server error : ${error}`)
+      }
+}  
+
+const connectToDr = async (req, res) => {
+  try {
+    const response = await reqModel.create({
+      userId: req.userId,
+      doctorEmail: req.body.doctorEmail,
+      queryType: req.body.queryType,
+      reqDescription: req.body.reqDescription,
+    });
+     if(!response) {
+      return 
+     }
+    res.status(200).json({ msg: "Success" });
+
+  } catch (error) {
+    res.status(500).json({ msg: `Internal Server Error: ${error.message}` });
+  }
+};
+
+module.exports = {userlogin , usersignup , CreateRemedies ,showMyRemedy , mybookmarks , mybookmarksdetail , verifyemail , connectToDr }

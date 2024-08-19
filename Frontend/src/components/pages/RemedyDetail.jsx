@@ -47,6 +47,7 @@ function RemedyDetail() {
       );
 
       setCommentOnRemedy(commentsWithUserData);
+      console.log(saved)
     } catch (error) {
       console.log(error);
     }
@@ -125,16 +126,17 @@ function RemedyDetail() {
         body: JSON.stringify({ RemedyId: id }),
       });
 
-      if (!response.ok) {
-        console.log("Server side error");
-        return;
-      } 
+    
 
       if (response.status === 403) {
+        console.log(response.status)
         setRemedySaved(false);
       } else if (response.status === 200) {
+        console.log(response.status)
         setRemedySaved(true);
       } 
+
+      
        
     } catch (error) {
       console.log(`Internal server error: ${error}`);
@@ -152,15 +154,17 @@ function RemedyDetail() {
         body: JSON.stringify({ RemedyId: id }),
       });
 
-      if (!response.ok) {
-        console.log("Server side error");
-        return;
-      }
+     
 
       if (response.status === 403) {
         setRemedySaved(true);
       } else if (response.status === 200) {
         setRemedySaved(false);
+      } 
+
+      if (!response.ok) {
+        console.log("Server side error");
+        return;
       }
     } catch (error) {
       console.log(`Internal server error: ${error}`);
@@ -168,8 +172,12 @@ function RemedyDetail() {
   };
 
   useEffect(() => {
-    bookMarkOrNot();
+   if (id && token) {
+      bookMarkOrNot();
+    }
   }, [id, token]);
+  
+  
 
   if (!currRemedy) {
     return (
@@ -293,9 +301,9 @@ function RemedyDetail() {
                       alt=""
                     />
                     <p className="flex">
-                      <p className="text-green-600">
+                      <span className="text-green-600">
                         {comment.commenter?.isDoctor ? "Dr." : ""}
-                      </p>
+                      </span>
                       {comment.commenter?.fullname || "Unknown User"}
                     </p>
                   </span>

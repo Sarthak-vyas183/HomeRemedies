@@ -78,7 +78,7 @@ const showComments = async (req, res) => {
 const showCommenter = async (req , res) => {
      try {
        const user = await userModel.findOne({_id : req.body.user})
-       console.log(user)
+     
        if(!user) return res.status(404).send("not found : user")
          
        res.status(200).json({commenter : user})
@@ -112,13 +112,15 @@ const bookmarkornot = async (req , res) => {
    if(!user) return res.status(404).json({msg : "User not found"})
 
    const remedyIdx = user.bookMarks.indexOf(req.body.RemedyId);
+   console.log(remedyIdx)
     if(remedyIdx != -1) {
       return res.status(403).json({msg :"remedy Exist !"});
     }
 
-   res.status(200).json({msg : "Remedy not Exist"});
+   res.status(200).json({msg : "Remedy not Exist"}); 
+
    } catch (error) {
-      res.json({msg : 'server error' , err : error})
+      res.status(404).json({msg : 'server error' , err : error})
    } 
 }
  

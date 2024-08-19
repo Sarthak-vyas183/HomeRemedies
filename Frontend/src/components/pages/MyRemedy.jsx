@@ -68,7 +68,12 @@ function MyRemedy() {
           </motion.div>
         )) 
       ) : (
-        <li>remedies not found</li>
+        <div className='w-full h-full'>
+           <h1 className='w-full h-[5%] px-2'>No Remedy found</h1>
+           <div className='w-full h-[95%] flex justify-center items-center'>
+           <img src="../../../images/Notfound.png" alt="" />
+           </div>
+        </div>
       )}
     </div>
   );
