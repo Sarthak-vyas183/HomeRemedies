@@ -5,6 +5,7 @@ const cors = require("cors")
 const dbconnet = require("./utiles/DB");
 const userRouter = require("./Router/userRouter");
 const AuthRouter = require("./Router/AuthRouter")
+const DoctorRouter = require("./Router/Doctor.router");
 
 
 app.use(express.json());
@@ -23,6 +24,7 @@ dbconnet()
 
 app.use("/api/user" , userRouter)
 app.use("/api/auth" , AuthRouter)
+app.use("/api/doctor" ,DoctorRouter)
 
 
 
