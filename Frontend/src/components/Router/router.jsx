@@ -62,7 +62,7 @@ function Router() {
              <Route path='myremedy' element={<MyRemedy/>} />
              <Route path='requests' element={<Users_Requests/>} />
              <Route path='verifyremedy' element={<Verify_Remedy/>} />
-
+             <Route path='bookmarks' element={<Bookmarks/>}></Route>
         </Route> 
        
   

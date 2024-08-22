@@ -67,6 +67,17 @@ function Doctor() {
           <FaClipboardCheck className="text-2xl" />
           User's Requests
         </NavLink>
+
+        <NavLink
+          className={({ isActive }) =>
+            `flex items-center gap-3 text-lg font-bold p-2 rounded-lg 
+            ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
+          }
+          to="/doctor/bookmarks"
+        >
+          <i class="ri-save-fill"></i>
+           Saved Remedies
+        </NavLink>
       </div>
 
       <div className="w-[80vw] bg-gray-100 text-black overflow-y-scroll">

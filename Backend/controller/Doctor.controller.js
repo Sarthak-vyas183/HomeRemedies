@@ -46,8 +46,12 @@ const verifyRemedy = async (req, res) => {
 }; 
 
 const getRequests = async (req , res) => {
-    try {
-        const requests = await reqModel.find();
+    try { 
+        const user =  await userModel.findOne({_id : req.userId}); 
+        if(!user) {
+            return res.send("Internal server error !");
+        } 
+        const requests = await reqModel.find({doctorEmail : user.email});
         if(!reqModel) return res.send("request Not found !");
         res.status(200).json({msg : "requests found !" , data : requests });
     } catch (error) {
