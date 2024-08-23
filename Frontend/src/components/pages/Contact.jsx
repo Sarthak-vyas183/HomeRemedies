@@ -2,21 +2,17 @@ import React from 'react';
 
 function Contact() {
   return (
-    <div className="flex items-center justify-center w-[100vw] h-[90vh] absolute top-[10vh] bg-white overflow-hidden">
-      <div className="bg-blue-100 p-8 h-[100%] rounded-lg shadow-md w-full max-w-lg">
+    <div className="flex max-[600px]:px-2 items-center justify-center w-[100vw] h-[90vh] absolute top-[10vh] bg-gray-700 overflow-hidden">
+      <div className="bg-blue-100 p-8 h-[90%] rounded-lg shadow-md w-full max-w-lg">
         <h1 className="text-3xl font-semibold text-blue-600 mb-6 text-center">Get In Touch</h1>
         <form className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div>
             <input
               type="text"
-              placeholder="First Name"
-              className="p-3 bg-blue-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              placeholder="Fullname"
+              className="w-[558px] max-[600px]:w-[280px] p-3 bg-blue-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
-            <input
-              type="text"
-              placeholder="Last Name"
-              className="p-3 bg-blue-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
+           
           </div>
           <div className="grid grid-cols-2 gap-4">
             <input
@@ -30,11 +26,7 @@ function Contact() {
               className="p-3 bg-blue-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
-          <input
-            type="text"
-            placeholder="Address"
-            className="w-full p-3 bg-blue-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+         
           <textarea
             placeholder="Type your message here"
             rows="4"

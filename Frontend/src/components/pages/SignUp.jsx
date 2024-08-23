@@ -15,7 +15,7 @@ function SignUp() {
   const { storeTokenInLs } = useAuth();
 
   useEffect(() => {
-    gsap.from('.signup-container', { scale : 0, opacity: 0, duration: 0.5, ease: "power1.out" });
+    gsap.from('.signup-container', { scale: 0, opacity: 0, duration: 0.5, ease: "power1.out" });
   }, []);
 
   const handleInput = (e) => {
@@ -66,7 +66,7 @@ function SignUp() {
   }
 
   return (
-    <div className="w-screen h-screen bg-[#F3F4F6] flex justify-center items-center overflow-hidden">
+    <div className="w-screen h-screen bg-gray-100 flex justify-center items-center overflow-hidden px-4">
       <div className="signup-container bg-white p-8 rounded-lg shadow-lg w-full max-w-md mt-[10vh]">
         <h1 className="text-3xl font-semibold text-center mb-6 text-gray-800">Sign Up</h1>
         <form onSubmit={handlesubmit} className="space-y-4">
